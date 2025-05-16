@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
@@ -191,7 +190,7 @@ const Index = () => {
           
           <DISCSummary scores={discScores} />
           
-          <ContactForm onSubmit={handleContactSubmit} />
+          <ContactForm onSubmit={handleContactSubmit} scores={discScores} />
         </div>
       )}
 
