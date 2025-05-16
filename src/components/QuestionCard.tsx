@@ -22,7 +22,7 @@ const QuestionCard = ({ question, onChange, currentValue }: QuestionCardProps) =
           value={currentValue?.toString()}
           onValueChange={(value) => onChange(parseInt(value, 10))}
         >
-          {[1, 2, 3, 4, 5].map((value) => (
+          {[0, 1, 2, 3, 4, 5].map((value) => (
             <div key={value} className="flex flex-col items-center space-y-1">
               <RadioGroupItem 
                 id={`q${question.id}-${value}`} 
@@ -33,15 +33,20 @@ const QuestionCard = ({ question, onChange, currentValue }: QuestionCardProps) =
                 htmlFor={`q${question.id}-${value}`} 
                 className="text-xs sm:text-sm cursor-pointer"
               >
-                {value === 1 && "Discordo totalmente"}
-                {value === 2 && "Discordo"}
-                {value === 3 && "Neutro"}
-                {value === 4 && "Concordo"}
-                {value === 5 && "Concordo totalmente"}
+                {value === 0 && "0"}
+                {value === 1 && "1"}
+                {value === 2 && "2"}
+                {value === 3 && "3"}
+                {value === 4 && "4"}
+                {value === 5 && "5"}
               </Label>
             </div>
           ))}
         </RadioGroup>
+        <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+          <span>Não me identifico</span>
+          <span>Me identifico totalmente</span>
+        </div>
       </CardContent>
     </Card>
   );

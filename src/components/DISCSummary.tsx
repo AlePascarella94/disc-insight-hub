@@ -31,13 +31,12 @@ const DISCSummary = ({ scores }: DISCSummaryProps) => {
       <CardContent className="space-y-6">
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="font-medium">D - Dominância</span>
+            <span className="font-medium">D - Dominante</span>
             <span>{Math.round(normalizedScores.D)}%</span>
           </div>
           <Progress 
             value={normalizedScores.D} 
-            className="h-2.5" 
-            indicatorClassName="bg-disc-red"
+            className="h-2.5 [&>div]:bg-disc-red"
           />
           <p className="text-sm text-muted-foreground">
             Foco em resultados, assertividade e desafios.
@@ -46,13 +45,12 @@ const DISCSummary = ({ scores }: DISCSummaryProps) => {
 
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="font-medium">I - Influência</span>
+            <span className="font-medium">I - Influente</span>
             <span>{Math.round(normalizedScores.I)}%</span>
           </div>
           <Progress 
             value={normalizedScores.I} 
-            className="h-2.5" 
-            indicatorClassName="bg-disc-yellow"
+            className="h-2.5 [&>div]:bg-disc-yellow"
           />
           <p className="text-sm text-muted-foreground">
             Foco em relacionamentos, comunicação e entusiasmo.
@@ -61,13 +59,12 @@ const DISCSummary = ({ scores }: DISCSummaryProps) => {
 
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="font-medium">S - Estabilidade</span>
+            <span className="font-medium">S - Estável</span>
             <span>{Math.round(normalizedScores.S)}%</span>
           </div>
           <Progress 
             value={normalizedScores.S} 
-            className="h-2.5" 
-            indicatorClassName="bg-disc-green"
+            className="h-2.5 [&>div]:bg-disc-green"
           />
           <p className="text-sm text-muted-foreground">
             Foco em cooperação, paciência e consistência.
@@ -76,13 +73,12 @@ const DISCSummary = ({ scores }: DISCSummaryProps) => {
 
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="font-medium">C - Conformidade</span>
+            <span className="font-medium">C - Analítico</span>
             <span>{Math.round(normalizedScores.C)}%</span>
           </div>
           <Progress 
             value={normalizedScores.C} 
-            className="h-2.5" 
-            indicatorClassName="bg-disc-blue"
+            className="h-2.5 [&>div]:bg-disc-blue"
           />
           <p className="text-sm text-muted-foreground">
             Foco em qualidade, análise e precisão.
@@ -98,10 +94,10 @@ const DISCSummary = ({ scores }: DISCSummaryProps) => {
               dominantTrait.trait === "S" ? "text-disc-green" :
               "text-disc-blue"
             }`}>
-              {dominantTrait.trait === "D" && "Dominância"}
-              {dominantTrait.trait === "I" && "Influência"}
-              {dominantTrait.trait === "S" && "Estabilidade"}
-              {dominantTrait.trait === "C" && "Conformidade"}
+              {dominantTrait.trait === "D" && "Dominante"}
+              {dominantTrait.trait === "I" && "Influente"}
+              {dominantTrait.trait === "S" && "Estável"}
+              {dominantTrait.trait === "C" && "Analítico"}
             </span>
           </p>
           <p className="text-sm text-muted-foreground mt-2">

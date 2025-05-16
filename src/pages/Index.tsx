@@ -120,22 +120,22 @@ const Index = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-red-50 rounded-lg border border-red-100">
-                  <h3 className="font-bold text-disc-red">D - Dominância</h3>
+                  <h3 className="font-bold text-disc-red">D - Dominante</h3>
                   <p className="text-sm mt-1">Foco em resultados, assertividade e tomada de decisões.</p>
                 </div>
                 
                 <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-100">
-                  <h3 className="font-bold text-disc-yellow">I - Influência</h3>
+                  <h3 className="font-bold text-disc-yellow">I - Influente</h3>
                   <p className="text-sm mt-1">Foco em relacionamentos, comunicação e persuasão.</p>
                 </div>
                 
                 <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                  <h3 className="font-bold text-disc-green">S - Estabilidade</h3>
+                  <h3 className="font-bold text-disc-green">S - Estável</h3>
                   <p className="text-sm mt-1">Foco em cooperação, paciência e confiabilidade.</p>
                 </div>
                 
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                  <h3 className="font-bold text-disc-blue">C - Conformidade</h3>
+                  <h3 className="font-bold text-disc-blue">C - Analítico</h3>
                   <p className="text-sm mt-1">Foco em qualidade, análise e precisão.</p>
                 </div>
               </div>

@@ -4,102 +4,102 @@ import { Question } from "../types/disc";
 export const questions: Question[] = [
   {
     id: 1,
-    text: "Prefiro agir rapidamente e tomar decisões com agilidade.",
+    text: "Gosto de assumir o controle de situações e tomar decisões rápidas.",
     type: "D"
   },
   {
     id: 2,
-    text: "Sinto-me à vontade em ambientes sociais e gosto de conhecer novas pessoas.",
+    text: "Sou uma pessoa sociável e gosto de estar rodeado de pessoas.",
     type: "I"
   },
   {
     id: 3,
-    text: "Prefiro trabalhar em um ambiente estável e previsível.",
+    text: "Prefiro ambientes calmos e previsíveis para trabalhar.",
     type: "S"
   },
   {
     id: 4,
-    text: "Priorizo a precisão e os detalhes em tudo o que faço.",
+    text: "Sou detalhista e gosto de seguir processos estruturados.",
     type: "C"
   },
   {
     id: 5,
-    text: "Gosto de liderar e influenciar os outros.",
+    text: "Tenho facilidade para liderar grupos e influenciar decisões.",
     type: "D"
   },
   {
     id: 6,
-    text: "Sou entusiasta e expressivo(a) em minhas opiniões.",
+    text: "Sou entusiasta e expressivo ao comunicar minhas ideias.",
     type: "I"
   },
   {
     id: 7,
-    text: "Sou paciente e bom ouvinte.",
+    text: "Sou uma pessoa paciente e bom ouvinte.",
     type: "S"
   },
   {
     id: 8,
-    text: "Prefiro seguir regras e procedimentos estabelecidos.",
+    text: "Prefiro analisar todas as informações antes de tomar uma decisão.",
     type: "C"
   },
   {
     id: 9,
-    text: "Gosto de desafios e situações competitivas.",
+    text: "Tenho facilidade para enfrentar desafios e situações de conflito.",
     type: "D"
   },
   {
     id: 10,
-    text: "Prefiro ambientes animados e dinâmicos.",
+    text: "Gosto de convencer as pessoas e sou persuasivo.",
     type: "I"
   },
   {
     id: 11,
-    text: "Prefiro cooperar do que competir.",
+    text: "Prefiro trabalhar em equipe e valorizo a harmonia no ambiente.",
     type: "S"
   },
   {
     id: 12,
-    text: "Gosto de analisar todas as opções antes de tomar uma decisão.",
+    text: "Sou organizado e metódico na forma como realizo minhas tarefas.",
     type: "C"
   },
   {
     id: 13,
-    text: "Sou direto(a) e franco(a) ao expressar minhas opiniões.",
+    text: "Sou direto ao expressar minhas opiniões, mesmo quando são difíceis.",
     type: "D"
   },
   {
     id: 14,
-    text: "Sou otimista e gosto de motivar os outros.",
+    text: "Tenho facilidade para fazer amizades e criar conexões.",
     type: "I"
   },
   {
     id: 15,
-    text: "Prefiro trabalhar em um ritmo constante e sem pressão.",
+    text: "Prefiro ambientes estáveis e sem mudanças bruscas.",
     type: "S"
   },
   {
     id: 16,
-    text: "Valorizo a qualidade e os padrões elevados.",
+    text: "Valorizo a precisão e qualidade em tudo o que faço.",
     type: "C"
   },
   {
     id: 17,
-    text: "Tomo iniciativa e busco resultados imediatos.",
+    text: "Gosto de resultados rápidos e desafios constantes.",
     type: "D"
   },
   {
     id: 18,
-    text: "Sou persuasivo(a) e gosto de influenciar opiniões.",
+    text: "Sou otimista e gosto de motivar as pessoas ao meu redor.",
     type: "I"
   },
   {
     id: 19,
-    text: "Sou leal e dedicado(a) em relacionamentos pessoais e profissionais.",
+    text: "Sou leal e constante nos meus relacionamentos pessoais e profissionais.",
     type: "S"
   },
   {
     id: 20,
-    text: "Sou meticuloso(a) e organizado(a) em meu trabalho.",
+    text: "Prefiro seguir regras e procedimentos estabelecidos.",
     type: "C"
   }
 ];
