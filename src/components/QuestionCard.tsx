@@ -19,7 +19,7 @@ const QuestionCard = ({ question, onChange, currentValue }: QuestionCardProps) =
         </div>
         <RadioGroup 
           className="flex space-x-1 sm:space-x-2 justify-between"
-          value={currentValue?.toString()}
+          value={currentValue?.toString() || ""}
           onValueChange={(value) => onChange(parseInt(value, 10))}
         >
           {[0, 1, 2, 3, 4, 5].map((value) => (

@@ -36,29 +36,41 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
       // Prepare the data to be sent
       const contactInfo = { name, whatsapp };
       
-      // Send data to WordPress (you'll need to set up a form handling plugin on WordPress)
-      // This is a basic example - you'll need to adjust the endpoint URL to match your WordPress setup
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('whatsapp', whatsapp);
-      formData.append('email_to', 'atendimento@thalitavalentim.com.br');
-      
-      // Add DISC scores if available
+      // Calculate normalized percentages for webhook
+      let webhookData;
       if (scores) {
-        formData.append('score_dominante', scores.D.toString());
-        formData.append('score_influente', scores.I.toString());
-        formData.append('score_estavel', scores.S.toString());
-        formData.append('score_analitico', scores.C.toString());
+        const totalScore = scores.D + scores.I + scores.S + scores.C;
+        const percentages = {
+          dominante: totalScore > 0 ? Math.round((scores.D / totalScore) * 100) : 0,
+          influente: totalScore > 0 ? Math.round((scores.I / totalScore) * 100) : 0,
+          estavel: totalScore > 0 ? Math.round((scores.S / totalScore) * 100) : 0,
+          analitico: totalScore > 0 ? Math.round((scores.C / totalScore) * 100) : 0,
+        };
+        
+        webhookData = {
+          nomeCompleto: name,
+          whatsapp: whatsapp,
+          ...percentages
+        };
+      } else {
+        webhookData = {
+          nomeCompleto: name,
+          whatsapp: whatsapp
+        };
       }
 
-      // Note: For WordPress integration, you'll need to set up a form handling plugin like Contact Form 7,
-      // WPForms, or use a custom endpoint in your WordPress site.
-      // This is a placeholder - replace with your actual WordPress form submission endpoint
-      const response = await fetch('https://thalitavalentim.com.br/wp-json/contact-form-7/v1/contact-forms/YOUR_FORM_ID/feedback', {
+      // Send data to webhook
+      const response = await fetch('https://www.pascarellatech.dedyn.io/webhook-test/DISC', {
         method: 'POST',
-        body: formData,
-        mode: 'no-cors' // This might be needed for cross-origin requests
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookData)
       });
+
+      if (!response.ok) {
+        throw new Error('Falha ao enviar dados');
+      }
       
       // Call the original onSubmit function to continue with the app flow
       onSubmit(contactInfo);

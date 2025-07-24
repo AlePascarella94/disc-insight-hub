@@ -8,13 +8,13 @@ interface DISCSummaryProps {
 }
 
 const DISCSummary = ({ scores }: DISCSummaryProps) => {
-  // Normalize scores to percentages
-  const maxPossibleScore = 25; // 5 questions per type, max score 5 per question
+  // Calculate total score to normalize to 100%
+  const totalScore = scores.D + scores.I + scores.S + scores.C;
   const normalizedScores = {
-    D: (scores.D / maxPossibleScore) * 100,
-    I: (scores.I / maxPossibleScore) * 100,
-    S: (scores.S / maxPossibleScore) * 100,
-    C: (scores.C / maxPossibleScore) * 100,
+    D: totalScore > 0 ? (scores.D / totalScore) * 100 : 0,
+    I: totalScore > 0 ? (scores.I / totalScore) * 100 : 0,
+    S: totalScore > 0 ? (scores.S / totalScore) * 100 : 0,
+    C: totalScore > 0 ? (scores.C / totalScore) * 100 : 0,
   };
 
   // Find dominant trait
