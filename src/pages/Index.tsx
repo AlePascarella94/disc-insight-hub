@@ -104,58 +104,162 @@ const Index = () => {
   return (
     <Layout>
       {currentStep === Step.Intro && (
-        <div className="max-w-3xl mx-auto">
-          <Card className="animate-fade-in">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl">Avaliação de Perfil Comportamental DISC</CardTitle>
-              <CardDescription className="text-lg mt-2">
-                Descubra seu perfil comportamental e potencialize seu desenvolvimento
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <p>
-                O DISC é uma metodologia que analisa o comportamento humano em quatro diferentes dimensões:
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-red-50 rounded-lg border border-red-100">
-                  <h3 className="font-bold text-disc-red">D - Dominante</h3>
-                  <p className="text-sm mt-1">Foco em resultados, assertividade e tomada de decisões.</p>
-                </div>
-                
-                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-100">
-                  <h3 className="font-bold text-disc-yellow">I - Influente</h3>
-                  <p className="text-sm mt-1">Foco em relacionamentos, comunicação e persuasão.</p>
-                </div>
-                
-                <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                  <h3 className="font-bold text-disc-green">S - Estável</h3>
-                  <p className="text-sm mt-1">Foco em cooperação, paciência e confiabilidade.</p>
-                </div>
-                
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                  <h3 className="font-bold text-disc-blue">C - Analítico</h3>
-                  <p className="text-sm mt-1">Foco em qualidade, análise e precisão.</p>
-                </div>
+        <div className="hero-bg flex items-center justify-center px-4 -mx-4 -mt-8">
+          <div className="max-w-4xl mx-auto text-center text-white">
+            <div className="animate-fade-in-up">
+              <div className="mb-8">
+                <h1 className="text-xl md:text-2xl font-light tracking-wide mb-2 hero-text">
+                  THALITA VALENTIM
+                </h1>
+                <div className="w-24 h-0.5 bg-white/60 mx-auto mb-6"></div>
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight hero-text mb-6">
+                  Descubra seu perfil comportamental{" "}
+                  <span className="block text-white/90">com o DISC</span>
+                </h2>
+                <p className="text-xl md:text-2xl font-light leading-relaxed mb-8 max-w-3xl mx-auto hero-text">
+                  Avaliação gratuita para você entender suas características comportamentais 
+                  e potencializar seu desenvolvimento pessoal e profissional.
+                </p>
               </div>
               
-              <div className="bg-secondary p-4 rounded-lg">
-                <h3 className="font-medium mb-2">Como funciona:</h3>
-                <ol className="list-decimal list-inside space-y-1 text-sm">
-                  <li>Responda a 20 perguntas sobre suas preferências comportamentais</li>
-                  <li>Veja um resumo do seu perfil DISC</li>
-                  <li>Deixe seus dados de contato</li>
-                  <li>Receba uma análise detalhada por WhatsApp</li>
-                </ol>
-              </div>
-              
-              <div className="text-center pt-4">
-                <Button onClick={handleStartTest} size="lg">
-                  Iniciar Avaliação
+              <div className="mb-12">
+                <Button 
+                  onClick={handleStartTest} 
+                  size="lg"
+                  className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                >
+                  INICIAR AVALIAÇÃO GRATUITA
                 </Button>
+                <p className="text-sm mt-4 text-white/80">(Sem sair de casa - 100% online)</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {currentStep === Step.Intro && (
+        <div className="max-w-6xl mx-auto mt-16 space-y-16">
+          {/* About DISC Section */}
+          <div className="text-center animate-fade-in-up">
+            <h3 className="text-3xl md:text-4xl font-bold mb-8 text-primary">
+              O que é a metodologia DISC?
+            </h3>
+            <p className="text-lg text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+              O DISC é uma ferramenta poderosa que analisa o comportamento humano em quatro diferentes dimensões, 
+              proporcionando autoconhecimento e clareza sobre seus padrões comportamentais.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="animate-scale-in border-2 hover:border-primary/30 transition-all duration-300 group">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold group-hover:scale-110 transition-transform">
+                    D
+                  </div>
+                  <h4 className="font-bold text-lg mb-2 text-red-600">Dominante</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Foco em resultados, assertividade e tomada de decisões rápidas.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card className="animate-scale-in border-2 hover:border-primary/30 transition-all duration-300 group">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold group-hover:scale-110 transition-transform">
+                    I
+                  </div>
+                  <h4 className="font-bold text-lg mb-2 text-yellow-600">Influente</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Foco em relacionamentos, comunicação e capacidade de persuasão.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card className="animate-scale-in border-2 hover:border-primary/30 transition-all duration-300 group">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold group-hover:scale-110 transition-transform">
+                    S
+                  </div>
+                  <h4 className="font-bold text-lg mb-2 text-green-600">Estável</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Foco em cooperação, paciência e construção de confiança.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card className="animate-scale-in border-2 hover:border-primary/30 transition-all duration-300 group">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold group-hover:scale-110 transition-transform">
+                    C
+                  </div>
+                  <h4 className="font-bold text-lg mb-2 text-blue-600">Analítico</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Foco em qualidade, análise detalhada e precisão.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* How it works */}
+          <div className="bg-secondary/30 rounded-2xl p-8 md:p-12 animate-fade-in-up">
+            <h3 className="text-3xl font-bold text-center mb-8 text-primary">Como funciona a avaliação?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  1
+                </div>
+                <h4 className="font-semibold mb-2">Responda 20 perguntas</h4>
+                <p className="text-sm text-muted-foreground">
+                  Perguntas simples sobre suas preferências comportamentais
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  2
+                </div>
+                <h4 className="font-semibold mb-2">Veja seu perfil</h4>
+                <p className="text-sm text-muted-foreground">
+                  Receba um resumo imediato do seu perfil DISC
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  3
+                </div>
+                <h4 className="font-semibold mb-2">Deixe seus dados</h4>
+                <p className="text-sm text-muted-foreground">
+                  Nome e WhatsApp para recebermos o contato
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  4
+                </div>
+                <h4 className="font-semibold mb-2">Análise detalhada</h4>
+                <p className="text-sm text-muted-foreground">
+                  Receba uma análise completa via WhatsApp
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center py-16 animate-fade-in-up">
+            <h3 className="text-3xl md:text-4xl font-bold mb-6 text-primary">
+              Pronto para se conhecer melhor?
+            </h3>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Comece agora sua jornada de autoconhecimento com nossa avaliação gratuita e descubra 
+              como potencializar seus pontos fortes.
+            </p>
+            <Button 
+              onClick={handleStartTest} 
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-lg px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              COMEÇAR AVALIAÇÃO AGORA
+            </Button>
+          </div>
         </div>
       )}
 
