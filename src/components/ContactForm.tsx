@@ -6,35 +6,72 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactInfo } from "@/types/disc";
 import { useToast } from "@/components/ui/use-toast";
+import { sanitizeInput, validateBrazilianPhone, validateName, RateLimiter, encodeForTransmission } from "@/lib/security";
 
 interface ContactFormProps {
   onSubmit: (contactInfo: ContactInfo) => void;
   scores?: { D: number; I: number; S: number; C: number };
 }
 
+// Create rate limiter instance outside component to persist across renders
+const rateLimiter = new RateLimiter(3, 60000); // 3 attempts per minute
+
 const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{name?: string; whatsapp?: string}>({});
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name.trim() || !whatsapp.trim()) {
+    // Clear previous validation errors
+    setValidationErrors({});
+    
+    // Rate limiting check
+    if (!rateLimiter.canAttempt()) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Por favor, preencha todos os campos para continuar.",
+        title: "Muitas tentativas",
+        description: "Aguarde um minuto antes de tentar novamente.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Enhanced validation
+    const errors: {name?: string; whatsapp?: string} = {};
+    
+    const sanitizedName = sanitizeInput(name);
+    const cleanWhatsapp = whatsapp.replace(/\D/g, "");
+    
+    if (!sanitizedName || !validateName(sanitizedName)) {
+      errors.name = "Nome deve conter apenas letras, ter entre 2-100 caracteres";
+    }
+    
+    if (!cleanWhatsapp || !validateBrazilianPhone(cleanWhatsapp)) {
+      errors.whatsapp = "WhatsApp deve ter 11 dígitos no formato brasileiro (XX) 9XXXX-XXXX";
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      toast({
+        title: "Dados inválidos",
+        description: "Por favor, verifique os campos destacados.",
         variant: "destructive"
       });
       return;
     }
 
     setIsSubmitting(true);
+    rateLimiter.recordAttempt();
 
     try {
-      // Prepare the data to be sent
-      const contactInfo = { name, whatsapp };
+      // Prepare sanitized data
+      const contactInfo = { 
+        name: sanitizedName, 
+        whatsapp: cleanWhatsapp 
+      };
       
       // Calculate normalized percentages for webhook
       let webhookData;
@@ -48,38 +85,56 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
         };
         
         webhookData = {
-          nomeCompleto: name,
-          whatsapp: whatsapp,
+          nomeCompleto: sanitizedName,
+          whatsapp: cleanWhatsapp,
           ...percentages
         };
       } else {
         webhookData = {
-          nomeCompleto: name,
-          whatsapp: whatsapp
+          nomeCompleto: sanitizedName,
+          whatsapp: cleanWhatsapp
         };
       }
 
-      // Send data to webhook
+      // Encode data for safe transmission
+      const safeWebhookData = encodeForTransmission(webhookData);
+
+      // Send data to webhook with security headers
       const response = await fetch('https://www.pascarellatech.dedyn.io/webhook-test/DISC', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest', // CSRF protection header
         },
-        body: JSON.stringify(webhookData)
+        body: JSON.stringify(safeWebhookData)
       });
 
       if (!response.ok) {
-        throw new Error('Falha ao enviar dados');
+        const errorText = await response.text().catch(() => 'Erro desconhecido');
+        console.error('Webhook error:', response.status, errorText);
+        throw new Error(`Falha ao enviar dados: ${response.status}`);
       }
       
-      // Call the original onSubmit function to continue with the app flow
+      // Success - call the original onSubmit function
       onSubmit(contactInfo);
+      
+      toast({
+        title: "Sucesso!",
+        description: "Seus dados foram enviados com segurança.",
+        variant: "default"
+      });
       
     } catch (error) {
       console.error("Error submitting form:", error);
+      
+      // More specific error handling
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Erro inesperado ao enviar dados";
+        
       toast({
         title: "Erro ao enviar",
-        description: "Ocorreu um erro ao enviar seus dados. Por favor, tente novamente.",
+        description: `${errorMessage}. Por favor, tente novamente.`,
         variant: "destructive"
       });
     } finally {
@@ -120,8 +175,12 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
               placeholder="Digite seu nome" 
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className={validationErrors.name ? "border-destructive" : ""}
               required
             />
+            {validationErrors.name && (
+              <p className="text-sm text-destructive">{validationErrors.name}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="whatsapp">Seu WhatsApp</Label>
@@ -130,9 +189,13 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
               placeholder="(00) 00000-0000" 
               value={formatWhatsApp(whatsapp)}
               onChange={handleWhatsAppChange}
+              className={validationErrors.whatsapp ? "border-destructive" : ""}
               inputMode="numeric"
               required
             />
+            {validationErrors.whatsapp && (
+              <p className="text-sm text-destructive">{validationErrors.whatsapp}</p>
+            )}
           </div>
         </CardContent>
         <CardFooter>
