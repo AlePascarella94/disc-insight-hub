@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import QuestionCard from "@/components/QuestionCard";
+import ChecklistCard from "@/components/ChecklistCard";
 import ProgressBar from "@/components/ProgressBar";
 import { questions } from "@/data/questions";
-import { Answer, ContactInfo, DISCScores } from "@/types/disc";
+import { checklistRows } from "@/data/checklistRows";
+import { Answer, ContactInfo, DISCScores, ChecklistAnswer } from "@/types/disc";
 import ContactForm from "@/components/ContactForm";
 import ThankYou from "@/components/ThankYou";
 import DISCSummary from "@/components/DISCSummary";
@@ -22,6 +24,7 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState<Step>(Step.Intro);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
+  const [checklistAnswers, setChecklistAnswers] = useState<ChecklistAnswer[]>([]);
   const [discScores, setDiscScores] = useState<DISCScores>({ D: 0, I: 0, S: 0, C: 0 });
   const { toast } = useToast();
 
@@ -55,6 +58,29 @@ const Index = () => {
     }
   };
 
+  const handleChecklistAnswerChange = (rowId: number, selectedTypes: ("D" | "C" | "S" | "I")[]) => {
+    const existingAnswerIndex = checklistAnswers.findIndex(a => a.rowId === rowId);
+    
+    if (existingAnswerIndex !== -1) {
+      // Update existing answer
+      const updatedAnswers = [...checklistAnswers];
+      updatedAnswers[existingAnswerIndex] = {
+        rowId,
+        selectedTypes
+      };
+      setChecklistAnswers(updatedAnswers);
+    } else {
+      // Add new answer
+      setChecklistAnswers([
+        ...checklistAnswers,
+        {
+          rowId,
+          selectedTypes
+        }
+      ]);
+    }
+  };
+
   const getCurrentAnswer = () => {
     const question = questions[currentQuestionIndex];
     const answer = answers.find(a => a.questionId === question.id);
@@ -62,28 +88,17 @@ const Index = () => {
   };
 
   const handleNext = () => {
-    if (getCurrentAnswer() === null) {
-      toast({
-        title: "Resposta necessária",
-        description: "Por favor, selecione uma resposta antes de continuar.",
-        variant: "destructive"
+    // Calculate DISC scores from checklist
+    const scores: DISCScores = { D: 0, I: 0, S: 0, C: 0 };
+    
+    checklistAnswers.forEach(answer => {
+      answer.selectedTypes.forEach(type => {
+        scores[type] += 1;
       });
-      return;
-    }
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      // Calculate DISC scores
-      const scores: DISCScores = { D: 0, I: 0, S: 0, C: 0 };
-      
-      answers.forEach(answer => {
-        scores[answer.type] += answer.value;
-      });
-      
-      setDiscScores(scores);
-      setCurrentStep(Step.Results);
-    }
+    });
+    
+    setDiscScores(scores);
+    setCurrentStep(Step.Results);
   };
 
   const handlePrevious = () => {
@@ -208,9 +223,9 @@ const Index = () => {
                 <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   1
                 </div>
-                <h4 className="font-semibold mb-2">Responda 20 perguntas</h4>
+                <h4 className="font-semibold mb-2">Marque suas características</h4>
                 <p className="text-sm text-muted-foreground">
-                  Perguntas simples sobre suas preferências comportamentais
+                  Selecione as palavras que mais se identificam com você
                 </p>
               </div>
               <div className="text-center">
@@ -264,25 +279,69 @@ const Index = () => {
       )}
 
       {currentStep === Step.Questions && (
-        <div className="max-w-2xl mx-auto">
-          <ProgressBar current={currentQuestionIndex + 1} total={questions.length} />
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-2">TESTE E GUIA DE PERFIS DISC</h2>
+            <p className="text-muted-foreground">
+              Preencha as lacunas abaixo com números de 1 a 4, na HORIZONTAL, sendo: 1 o que menos se identifica e 4 o que mais se identifica.
+            </p>
+          </div>
+
+          {/* Column Headers */}
+          <div className="grid grid-cols-4 gap-4 mb-4 font-bold text-center">
+            <div className="text-red-700">Dominante</div>
+            <div className="text-blue-700">Analítico</div>
+            <div className="text-green-700">Estável</div>
+            <div className="text-yellow-700">Influente</div>
+          </div>
+
+          {/* Checklist Rows */}
+          <div className="space-y-2 mb-8">
+            {checklistRows.map((row) => (
+              <ChecklistCard
+                key={row.id}
+                row={row}
+                answers={checklistAnswers}
+                onChange={handleChecklistAnswerChange}
+              />
+            ))}
+          </div>
+
+          {/* Totals Section */}
+          <div className="grid grid-cols-4 gap-4 mb-6">
+            <div className="border-2 border-red-200 p-4 text-center">
+              <div className="text-red-700 font-bold text-lg">Total Dominante</div>
+              <div className="text-2xl font-bold text-red-700">
+                {checklistAnswers.reduce((sum, answer) => 
+                  sum + answer.selectedTypes.filter(type => type === "D").length, 0)}
+              </div>
+            </div>
+            <div className="border-2 border-blue-200 p-4 text-center">
+              <div className="text-blue-700 font-bold text-lg">Total Analítico</div>
+              <div className="text-2xl font-bold text-blue-700">
+                {checklistAnswers.reduce((sum, answer) => 
+                  sum + answer.selectedTypes.filter(type => type === "C").length, 0)}
+              </div>
+            </div>
+            <div className="border-2 border-green-200 p-4 text-center">
+              <div className="text-green-700 font-bold text-lg">Total Estável</div>
+              <div className="text-2xl font-bold text-green-700">
+                {checklistAnswers.reduce((sum, answer) => 
+                  sum + answer.selectedTypes.filter(type => type === "S").length, 0)}
+              </div>
+            </div>
+            <div className="border-2 border-yellow-200 p-4 text-center">
+              <div className="text-yellow-700 font-bold text-lg">Total Influente</div>
+              <div className="text-2xl font-bold text-yellow-700">
+                {checklistAnswers.reduce((sum, answer) => 
+                  sum + answer.selectedTypes.filter(type => type === "I").length, 0)}
+              </div>
+            </div>
+          </div>
           
-          <QuestionCard 
-            question={questions[currentQuestionIndex]} 
-            onChange={handleAnswerChange}
-            currentValue={getCurrentAnswer()}
-          />
-          
-          <div className="flex justify-between mt-6">
-            <Button 
-              variant="outline" 
-              onClick={handlePrevious}
-              disabled={currentQuestionIndex === 0}
-            >
-              Anterior
-            </Button>
-            <Button onClick={handleNext}>
-              {currentQuestionIndex < questions.length - 1 ? "Próxima" : "Finalizar"}
+          <div className="text-center">
+            <Button onClick={handleNext} size="lg">
+              Ver Meus Resultados
             </Button>
           </div>
         </div>
