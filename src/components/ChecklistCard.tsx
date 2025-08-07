@@ -70,9 +70,6 @@ const ChecklistCard = ({ row, answers, onChange }: ChecklistCardProps) => {
         <div className="grid grid-cols-4 gap-4">
           {(["D", "C", "S", "I"] as const).map((type) => (
             <div key={type} className="space-y-2">
-              <h4 className={`text-sm font-semibold ${getColumnColor(type)}`}>
-                {getColumnTitle(type)}
-              </h4>
               <div className="space-y-1">
                 {row.options[type].map((characteristic, index) => (
                   <p key={index} className="text-xs text-muted-foreground">
