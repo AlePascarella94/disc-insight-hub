@@ -100,7 +100,7 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
       const safeWebhookData = encodeForTransmission(webhookData);
 
       // Send data to webhook with security headers
-      const response = await fetch('https://www.pascarellatech.dedyn.io/webhook-test/DISC', {
+      const response = await fetch('https://www.pascarellatech.dedyn.io/webhook/DISC', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
