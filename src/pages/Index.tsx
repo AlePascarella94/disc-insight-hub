@@ -58,7 +58,7 @@ const Index = () => {
     }
   };
 
-  const handleChecklistAnswerChange = (rowId: number, selectedTypes: ("D" | "C" | "S" | "I")[]) => {
+  const handleChecklistAnswerChange = (rowId: number, values: { D: number | null; C: number | null; S: number | null; I: number | null }) => {
     const existingAnswerIndex = checklistAnswers.findIndex(a => a.rowId === rowId);
     
     if (existingAnswerIndex !== -1) {
@@ -66,7 +66,7 @@ const Index = () => {
       const updatedAnswers = [...checklistAnswers];
       updatedAnswers[existingAnswerIndex] = {
         rowId,
-        selectedTypes
+        values
       };
       setChecklistAnswers(updatedAnswers);
     } else {
@@ -75,7 +75,7 @@ const Index = () => {
         ...checklistAnswers,
         {
           rowId,
-          selectedTypes
+          values
         }
       ]);
     }
@@ -92,8 +92,10 @@ const Index = () => {
     const scores: DISCScores = { D: 0, I: 0, S: 0, C: 0 };
     
     checklistAnswers.forEach(answer => {
-      answer.selectedTypes.forEach(type => {
-        scores[type] += 1;
+      Object.entries(answer.values).forEach(([type, value]) => {
+        if (value !== null) {
+          scores[type as keyof DISCScores] += value;
+        }
       });
     });
     
@@ -313,28 +315,28 @@ const Index = () => {
               <div className="text-red-700 font-bold text-lg">Total Dominante</div>
               <div className="text-2xl font-bold text-red-700">
                 {checklistAnswers.reduce((sum, answer) => 
-                  sum + answer.selectedTypes.filter(type => type === "D").length, 0)}
+                  sum + (answer.values.D || 0), 0)}
               </div>
             </div>
             <div className="border-2 border-blue-200 p-4 text-center">
               <div className="text-blue-700 font-bold text-lg">Total Analítico</div>
               <div className="text-2xl font-bold text-blue-700">
                 {checklistAnswers.reduce((sum, answer) => 
-                  sum + answer.selectedTypes.filter(type => type === "C").length, 0)}
+                  sum + (answer.values.C || 0), 0)}
               </div>
             </div>
             <div className="border-2 border-green-200 p-4 text-center">
               <div className="text-green-700 font-bold text-lg">Total Estável</div>
               <div className="text-2xl font-bold text-green-700">
                 {checklistAnswers.reduce((sum, answer) => 
-                  sum + answer.selectedTypes.filter(type => type === "S").length, 0)}
+                  sum + (answer.values.S || 0), 0)}
               </div>
             </div>
             <div className="border-2 border-yellow-200 p-4 text-center">
               <div className="text-yellow-700 font-bold text-lg">Total Influente</div>
               <div className="text-2xl font-bold text-yellow-700">
                 {checklistAnswers.reduce((sum, answer) => 
-                  sum + answer.selectedTypes.filter(type => type === "I").length, 0)}
+                  sum + (answer.values.I || 0), 0)}
               </div>
             </div>
           </div>

@@ -8,10 +8,10 @@ export interface Question {
 export interface ChecklistRow {
   id: number;
   options: {
-    D: string;
-    C: string;
-    S: string;
-    I: string;
+    D: string[];
+    C: string[];
+    S: string[];
+    I: string[];
   };
 }
 
@@ -23,7 +23,12 @@ export interface Answer {
 
 export interface ChecklistAnswer {
   rowId: number;
-  selectedTypes: ("D" | "C" | "S" | "I")[];
+  values: {
+    D: number | null;
+    C: number | null;
+    S: number | null;
+    I: number | null;
+  };
 }
 
 export interface ContactInfo {

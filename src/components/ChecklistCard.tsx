@@ -1,27 +1,47 @@
 import { ChecklistRow, ChecklistAnswer } from "@/types/disc";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ChecklistCardProps {
   row: ChecklistRow;
   answers: ChecklistAnswer[];
-  onChange: (rowId: number, selectedTypes: ("D" | "C" | "S" | "I")[]) => void;
+  onChange: (rowId: number, values: { D: number | null; C: number | null; S: number | null; I: number | null }) => void;
 }
 
 const ChecklistCard = ({ row, answers, onChange }: ChecklistCardProps) => {
   const currentAnswer = answers.find(a => a.rowId === row.id);
-  const selectedTypes = currentAnswer?.selectedTypes || [];
+  const values = currentAnswer?.values || { D: null, C: null, S: null, I: null };
+  const { toast } = useToast();
 
-  const handleCheckboxChange = (type: "D" | "C" | "S" | "I", checked: boolean) => {
-    let newSelectedTypes: ("D" | "C" | "S" | "I")[];
+  const handleInputChange = (type: "D" | "C" | "S" | "I", value: string) => {
+    const numValue = value === "" ? null : parseInt(value, 10);
     
-    if (checked) {
-      newSelectedTypes = [...selectedTypes, type];
-    } else {
-      newSelectedTypes = selectedTypes.filter(t => t !== type);
+    // Validate input
+    if (numValue !== null && (numValue < 1 || numValue > 4)) {
+      toast({
+        title: "Valor inválido",
+        description: "Por favor, insira um número de 1 a 4.",
+        variant: "destructive"
+      });
+      return;
     }
-    
-    onChange(row.id, newSelectedTypes);
+
+    // Check for duplicates in the same row
+    const newValues = { ...values, [type]: numValue };
+    const usedNumbers = Object.values(newValues).filter(v => v !== null);
+    const hasDuplicates = usedNumbers.length !== new Set(usedNumbers).size;
+
+    if (hasDuplicates && numValue !== null) {
+      toast({
+        title: "Número já usado",
+        description: "Cada número de 1 a 4 só pode ser usado uma vez por linha.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    onChange(row.id, newValues);
   };
 
   const getColumnColor = (type: "D" | "C" | "S" | "I") => {
@@ -34,24 +54,41 @@ const ChecklistCard = ({ row, answers, onChange }: ChecklistCardProps) => {
     }
   };
 
+  const getColumnTitle = (type: "D" | "C" | "S" | "I") => {
+    switch(type) {
+      case "D": return "Dominante";
+      case "C": return "Analítico"; 
+      case "S": return "Estável";
+      case "I": return "Influente";
+      default: return "";
+    }
+  };
+
   return (
-    <Card className="w-full mb-3">
+    <Card className="w-full mb-4">
       <CardContent className="p-4">
         <div className="grid grid-cols-4 gap-4">
           {(["D", "C", "S", "I"] as const).map((type) => (
-            <div key={type} className="flex items-center space-x-2">
-              <Checkbox
-                id={`row-${row.id}-${type}`}
-                checked={selectedTypes.includes(type)}
-                onCheckedChange={(checked) => handleCheckboxChange(type, checked as boolean)}
-                className="flex-shrink-0"
+            <div key={type} className="space-y-2">
+              <h4 className={`text-sm font-semibold ${getColumnColor(type)}`}>
+                {getColumnTitle(type)}
+              </h4>
+              <div className="space-y-1">
+                {row.options[type].map((characteristic, index) => (
+                  <p key={index} className="text-xs text-muted-foreground">
+                    {characteristic}
+                  </p>
+                ))}
+              </div>
+              <Input
+                type="number"
+                min="1"
+                max="4"
+                value={values[type] || ""}
+                onChange={(e) => handleInputChange(type, e.target.value)}
+                className="w-16 h-16 text-center text-lg font-bold"
+                placeholder=""
               />
-              <label 
-                htmlFor={`row-${row.id}-${type}`}
-                className={`text-sm cursor-pointer leading-tight ${getColumnColor(type)}`}
-              >
-                {row.options[type]}
-              </label>
             </div>
           ))}
         </div>
