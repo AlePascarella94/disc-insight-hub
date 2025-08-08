@@ -302,9 +302,22 @@ const Index = () => {
           </div>
           
           <div className="text-center">
-            <Button onClick={handleNext} size="lg">
+            <Button 
+              onClick={handleNext} 
+              size="lg"
+              disabled={checklistAnswers.length < 9 || !checklistAnswers.every(answer => 
+                Object.values(answer.values).every(value => value > 0)
+              )}
+            >
               Ver Meus Resultados
             </Button>
+            {(checklistAnswers.length < 9 || !checklistAnswers.every(answer => 
+              Object.values(answer.values).every(value => value > 0)
+            )) && (
+              <p className="text-sm text-muted-foreground mt-2">
+                Preencha todas as linhas para ver seus resultados
+              </p>
+            )}
           </div>
         </div>
       )}
