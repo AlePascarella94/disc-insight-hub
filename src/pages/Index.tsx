@@ -126,7 +126,7 @@ const Index = () => {
             <div className="animate-fade-in-up">
               <div className="mb-8">
                 <h1 className="text-xl md:text-2xl font-light tracking-wide mb-2 hero-text">
-                  THALITA VALENTIM
+                  THALITA PASCARELLA
                 </h1>
                 <div className="w-24 h-0.5 bg-white/60 mx-auto mb-6"></div>
                 <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight hero-text mb-6">
@@ -289,14 +289,6 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Column Headers */}
-          <div className="grid grid-cols-4 gap-4 mb-4 font-bold text-center">
-            <div className="text-red-700">Dominante</div>
-            <div className="text-blue-700">Analítico</div>
-            <div className="text-green-700">Estável</div>
-            <div className="text-yellow-700">Influente</div>
-          </div>
-
           {/* Checklist Rows */}
           <div className="space-y-2 mb-8">
             {checklistRows.map((row) => (
@@ -307,38 +299,6 @@ const Index = () => {
                 onChange={handleChecklistAnswerChange}
               />
             ))}
-          </div>
-
-          {/* Totals Section */}
-          <div className="grid grid-cols-4 gap-4 mb-6">
-            <div className="border-2 border-red-200 p-4 text-center">
-              <div className="text-red-700 font-bold text-lg">Total Dominante</div>
-              <div className="text-2xl font-bold text-red-700">
-                {checklistAnswers.reduce((sum, answer) => 
-                  sum + (answer.values.D || 0), 0)}
-              </div>
-            </div>
-            <div className="border-2 border-blue-200 p-4 text-center">
-              <div className="text-blue-700 font-bold text-lg">Total Analítico</div>
-              <div className="text-2xl font-bold text-blue-700">
-                {checklistAnswers.reduce((sum, answer) => 
-                  sum + (answer.values.C || 0), 0)}
-              </div>
-            </div>
-            <div className="border-2 border-green-200 p-4 text-center">
-              <div className="text-green-700 font-bold text-lg">Total Estável</div>
-              <div className="text-2xl font-bold text-green-700">
-                {checklistAnswers.reduce((sum, answer) => 
-                  sum + (answer.values.S || 0), 0)}
-              </div>
-            </div>
-            <div className="border-2 border-yellow-200 p-4 text-center">
-              <div className="text-yellow-700 font-bold text-lg">Total Influente</div>
-              <div className="text-2xl font-bold text-yellow-700">
-                {checklistAnswers.reduce((sum, answer) => 
-                  sum + (answer.values.I || 0), 0)}
-              </div>
-            </div>
           </div>
           
           <div className="text-center">
