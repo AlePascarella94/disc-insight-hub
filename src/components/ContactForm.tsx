@@ -99,29 +99,19 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
       // Encode data for safe transmission
       const safeWebhookData = encodeForTransmission(webhookData);
 
-      // Send data to both webhooks in parallel
-      const webhookUrls = [
-        'https://www.pascarellatech.dedyn.io/webhook/DISC',
-        'http://167.86.97.214:5678/webhook-test/DiskThalita'
-      ];
+      // Send data to webhook
+      const response = await fetch('http://167.86.97.214:5678/webhook-test/DiskThalita', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify(safeWebhookData)
+      });
 
-      const responses = await Promise.all(
-        webhookUrls.map(url =>
-          fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: JSON.stringify(safeWebhookData)
-          })
-        )
-      );
-
-      const failedResponses = responses.filter(r => !r.ok);
-      if (failedResponses.length > 0) {
-        console.error('Webhook errors:', failedResponses.map(r => r.status));
-        throw new Error(`Falha ao enviar dados`);
+      if (!response.ok) {
+        console.error('Webhook error:', response.status);
+        throw new Error(`Falha ao enviar dados: ${response.status}`);
       }
       
       // Success - call the original onSubmit function
