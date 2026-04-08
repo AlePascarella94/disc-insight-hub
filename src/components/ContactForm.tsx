@@ -100,7 +100,7 @@ const ContactForm = ({ onSubmit, scores }: ContactFormProps) => {
       const safeWebhookData = encodeForTransmission(webhookData);
 
       // Send data to webhook
-      const response = await fetch('https://disk.thalitavalentim.com.br/webhook/DiskThalita', {
+      const response = await fetch('https://N8N.thalitavalentim.com.br/webhook-test/Disc_ThalitaValentim', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
